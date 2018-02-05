@@ -22,7 +22,7 @@ namespace XJ.School.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Studens.ToListAsync());
+            return View(await _context.Studens.AsNoTracking().ToListAsync());
         }
 
         // GET: Students/Details/5
@@ -33,7 +33,7 @@ namespace XJ.School.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Studens
+            var student = await _context.Studens.Include(I=>I.Enrollments).ThenInclude(t=>t.Course).AsNoTracking()
                 .SingleOrDefaultAsync(m => m.ID == id);
             if (student == null)
             {
